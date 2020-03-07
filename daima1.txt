@@ -1,0 +1,27 @@
+import math
+def hangshu(a, b, c):
+    drt = b ** 2 - 4 * a * c
+    if a == 0:
+        if b == 0:
+            x = "方程无意义!"
+            return x
+        else:
+            x = -c / b
+            return x
+    elif drt < 0:
+        x = '方程无实数解!'
+        return x
+    elif drt == 0:
+        x = -b / (2 * a)
+        return x
+    else:
+        x1 = (-b + math.sqrt(drt)) / (2 * a)
+        x2 = (-b - math.sqrt(drt)) / (2 * a)
+        return x1, x2
+
+abc = input('依次键入一元二次方程中abc的值(逗号隔开): ' )
+abc = abc.split(',')
+a = int(abc[0])
+b = int(abc[1])
+c = int(abc[2])
+print(hangshu(a, b, c))
