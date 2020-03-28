@@ -1,0 +1,120 @@
+第七讲单元作业代码：
+单元作业1：
+import matplotlib.pyplot as plt
+from PIL import Image
+plt.rcParams['font.sans-serif']=['SimHei']
+img=Image.open("Lena.tiff")
+img_r,img_g,img_b=img.split()
+plt.figure(figsize=(10,10))
+plt.suptitle("图像基本操作",fontsize=20)
+plt.subplot(221)
+plt.axis("off")
+img_small=img_r.resize((50,50))
+plt.imshow(img_small,cmap="gray")
+plt.title("R-缩放",fontsize=14)
+plt.subplot(222)
+plt.axis()
+img_flr=img_g.transpose(Image.FLIP_LEFT_RIGHT)
+IMG=img_flr.transpose(Image.ROTATE_270)
+plt.imshow(IMG,cmap="gray")
+plt.title("G-镜像+旋转",fontsize=14)
+plt.subplot(223)
+plt.axis("off")
+img_cp=img_b.crop((0,0,300,300))
+plt.imshow(img_cp,cmap="gray")
+plt.title("B-裁剪",fontsize=14)
+img_rgb=Image.merge("RGB",[img_r,img_g,img_b])
+plt.subplot(224)
+plt.axis("off")
+plt.imshow(img_rgb)
+plt.title("RGB",fontsize=14)
+img_rgb.save("test.png")
+plt.show()
+
+
+单元作业2：
+import tensorflow as tf
+import matplotlib.pyplot as plt
+import numpy as np
+plt.rcParams['font.sans-serif']=['SimHei']
+mnist=tf.keras.datasets.mnist
+(train_x,train_y),(test_x,test_y)=mnist.load_data()
+plt.figure(figsize=(10,10))
+plt.suptitle("MNIST测试集样本",fontsize=20,color="red")
+for i in range(16):
+    num=np.random.randint(1,50000)
+    plt.subplot(4,4,i+1)
+    plt.axis("off")
+    plt.imshow(train_x[num],cmap='gray')
+    plt.title(train_y[num],fontsize=14)
+plt.show()
+
+
+第八讲单元作业
+单元作业1：
+import tensorflow as tf
+x=[64.3, 99.6, 145.45, 63.75, 135.46, 92.85, 86.97, 144.76, 59.3, 116.03]
+y=[62.55, 82.42, 132.62, 73.31, 131.05, 86.57, 85.49, 127.44, 55.25, 104.84]
+t = tf.reduce_mean(x)
+r = tf.reduce_mean(y)
+a=tf.subtract(x,t)
+b1=tf.subtract(y,r)
+c=tf.square(a)
+x1=tf.multiply(a,b1)
+m=tf.reduce_sum(x1)
+n=tf.reduce_sum(c)
+w=tf.divide(m,n)
+b=tf.subtract(r,tf.multiply(w,t))
+print(w)
+print(b)
+
+
+
+单元作业2
+import tensorflow as tf
+x=[64.3, 99.6, 145.45, 63.75, 135.46, 92.85, 86.97, 144.76, 59.3, 116.03]
+y=[62.55, 82.42, 132.62, 73.31, 131.05, 86.57, 85.49, 127.44, 55.25, 104.84]
+x1=tf.multiply(x,y)
+x2=tf.reduce_sum(x1)
+x3=tf.multiply(10,x2)
+a=tf.reduce_sum(y)
+b2=tf.reduce_sum(x)
+y=tf.multiply(a,b2)
+m=tf.subtract(x3,y)
+t=tf.square(x)
+t1=tf.reduce_sum(t)
+k=tf.square(b2)
+t2=tf.multiply(10,t1)
+n=tf.subtract(t2,k)
+w=tf.divide(m,n)
+b1=tf.multiply(10,b2)
+m1=tf.subtract(a,b1)
+b=tf.divide(m1,10)
+print(w)
+print(b)
+
+
+第九讲单元作业：
+import numpy as np
+import tensorflow as tf
+x1=np.array([137.97,104.50,100.00,124.32,79.20,99.00,124.00,114.00,106.69,138.05,53.75,46.91,68.00,63.02,81.26,86.21])
+x2=np.array([3,2,2,3,1,2,3,2,2,3,1,1,1,1,2,2])
+y=np.array([145.00,110.00,93.00,116.00,65.32,104.00,118.00,91.00,62.00,133.00,51.00,45.00,78.50,69.65,75.69,95.30])
+x0=np.ones(len(x1))
+X=np.stack((x0,x1,x2),axis=1)
+Y=np.array(y).reshape(-1,1)
+Xt=tf.transpose(X)
+XtX_1=tf.linalg.inv(tf.matmul(Xt,X))
+XtX_1_Xt=tf.matmul(XtX_1,Xt)
+w=np.matmul(XtX_1_Xt,Y)
+w=w.reshape(-1)
+print("请输入房屋面积和房间数")
+x1_test=float(input("商品房面积："))
+x2_test=int(input("房间数："))
+y_pred=w[1]*x1_test+w[2]*x2_test+w[0]
+if x1_test<20 or x1_test>500 and x2_test<1 or x2_test>10:
+    print("请输入20-500的房屋面积")
+    print("请输入1-10的房间数")
+    x1_test = float(input("商品房面积："))
+    x2_test = int(input("房间数："))
+print("预测价格：",round(y_pred,2),"万元")
